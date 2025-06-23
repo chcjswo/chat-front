@@ -41,16 +41,17 @@
 
 <script>
 import axios from 'axios';
-export default{
-  data(){
-    return{
+
+export default {
+  data() {
+    return {
       name: "",
       email: "",
       password: "",
     }
   },
-  methods:{
-    async memberCreate(){
+  methods: {
+    async memberCreate() {
       const data = {
         name: this.name,
         email: this.email,

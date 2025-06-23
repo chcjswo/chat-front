@@ -7,27 +7,27 @@ import StompChatPage from "@/views/StompChatPage.vue"
 
 const routes = [
     {
-        path:'/member/create',
+        path: '/member/create',
         name: 'MemberCreate',
         component: MemberCreate
     },
     {
-        path:'/login',
+        path: '/login',
         name: 'LoginPage',
         component: LoginPage
     },
     {
-        path:'/member/list',
+        path: '/member/list',
         name: 'MemberList',
         component: MemberList
     },
     {
-        path:'/simple/chat',
+        path: '/simple/chat',
         name: 'SimpleWebsocket',
         component: SimpleWebsocket
     },
     {
-        path:'/room/:roomId',
+        path: '/chatpage',
         name: 'StompChatPage',
         component: StompChatPage
     },

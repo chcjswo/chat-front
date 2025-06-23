@@ -18,9 +18,9 @@
               </thead>
               <tbody>
               <tr v-for="member in memberList" :key="member.id">
-                <td>{{member.id}}</td>
-                <td>{{member.name}}</td>
-                <td>{{member.email}}</td>
+                <td>{{ member.id }}</td>
+                <td>{{ member.name }}</td>
+                <td>{{ member.email }}</td>
                 <td>
                   <v-btn color="primary" @click="startChat(member.id)">채팅하기</v-btn>
                 </td>
@@ -39,19 +39,20 @@
 
 <script>
 import axios from 'axios';
-export default{
-  data(){
+
+export default {
+  data() {
     return {
       memberList: []
     }
   },
-  async created(){
+  async created() {
     const response = await axios.get(`${process.env.VUE_APP_API_BASE_URL}/members/list`);
     this.memberList = response.data;
   },
-  methods:{
+  methods: {
 
-    async startChat(otherMemberId){
+    async startChat(otherMemberId) {
       // 기존의 채팅방이 있으면 return받고, 없으면 새롭게 생성된 roomId return.
       const response = await axios.post(`${process.env.VUE_APP_API_BASE_URL}/chat/room/private/create?otherMemberId=${otherMemberId}`);
       const roomId = response.data;

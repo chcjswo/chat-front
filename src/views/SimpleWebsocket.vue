@@ -32,22 +32,22 @@
 </template>
 
 <script>
-export default{
-  data(){
+export default {
+  data() {
     return {
       ws: null,
       messages: [],
       newMessage: ""
     }
   },
-  created(){
+  created() {
     this.connectWebsocket();
   },
   beforeUnmount() {
     this.disconnectWebSocket();
   },
   methods: {
-    connectWebsocket(){
+    connectWebsocket() {
       this.ws = new WebSocket("ws://localhost:8080/connect");
 
       this.ws.onopen = () => {
@@ -63,19 +63,19 @@ export default{
         console.log("disconnected!!")
       }
     },
-    sendMessage(){
-      if(this.newMessage.trim() === "")return;
+    sendMessage() {
+      if (this.newMessage.trim() === "") return;
       this.ws.send(this.newMessage);
       this.newMessage = ""
     },
-    scrollToBottom(){
-      this.$nextTick(()=>{
+    scrollToBottom() {
+      this.$nextTick(() => {
         const chatBox = this.$el.querySelector(".chat-box");
         chatBox.scrollTop = chatBox.scrollHeight;
       })
     },
-    disconnectWebSocket(){
-      if(this.ws){
+    disconnectWebSocket() {
+      if (this.ws) {
         this.ws.close();
         console.log("disconnected!!")
         this.ws = null;
@@ -85,7 +85,7 @@ export default{
 }
 </script>
 <style>
-.chat-box{
+.chat-box {
   height: 300px;
   overflow-y: auto;
   border: 1px solid #ddd;

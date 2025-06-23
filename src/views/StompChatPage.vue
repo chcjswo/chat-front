@@ -37,8 +37,8 @@ import SockJS from 'sockjs-client';
 import Stomp from 'webstomp-client';
 import axios from 'axios';
 
-export default{
-  data(){
+export default {
+  data() {
     return {
       messages: [],
       newMessage: "",
@@ -48,7 +48,7 @@ export default{
       roomId: null,
     }
   },
-  async created(){
+  async created() {
     this.senderEmail = localStorage.getItem("email");
     this.roomId = this.$route.params.roomId;
     const response = await axios.get(`${process.env.VUE_APP_API_BASE_URL}/chat/history/${this.roomId}`);
@@ -65,8 +65,9 @@ export default{
     this.disconnectWebSocket();
   },
   methods: {
-    connectWebsocket(){
-      if(this.stompClient && this.stompClient.connected) return;
+    connectWebsocket() {
+      console.log('this.stompClient.connected {}', this.stompClient.connected);
+      if (this.stompClient && this.stompClient.connected) return;
       // sockjs는 websocket을 내장한 향상된 js 라이브러리. http엔드포인트 사용.
       const sockJs = new SockJS(`${process.env.VUE_APP_API_BASE_URL}/connect`)
       this.stompClient = Stomp.over(sockJs);
@@ -74,33 +75,33 @@ export default{
       this.stompClient.connect({
             Authorization: `Bearer ${this.token}`
           },
-          ()=>{
-            this.stompClient.subscribe(`/topic/${this.roomId}`, (message) => {
+          () => {
+            this.stompClient.subscribe(`/topic/1`, (message) => {
               const parseMessage = JSON.parse(message.body);
               this.messages.push(parseMessage);
               this.scrollToBottom();
-            },{Authorization: `Bearer ${this.token}`})
+            }, {Authorization: `Bearer ${this.token}`})
           }
       )
     },
-    sendMessage(){
-      if(this.newMessage.trim() === "")return;
+    sendMessage() {
+      if (this.newMessage.trim() === "") return;
       const message = {
         senderEmail: this.senderEmail,
         message: this.newMessage
       }
-      this.stompClient.send(`/publish/${this.roomId}`, JSON.stringify(message));
+      this.stompClient.send(`/publish/1`, JSON.stringify(message));
       this.newMessage = ""
     },
-    scrollToBottom(){
-      this.$nextTick(()=>{
+    scrollToBottom() {
+      this.$nextTick(() => {
         const chatBox = this.$el.querySelector(".chat-box");
         chatBox.scrollTop = chatBox.scrollHeight;
       })
     },
-    async disconnectWebSocket(){
+    async disconnectWebSocket() {
       await axios.post(`${process.env.VUE_APP_API_BASE_URL}/chat/room/${this.roomId}/read`);
-      if(this.stompClient && this.stompClient.connected){
+      if (this.stompClient && this.stompClient.connected) {
         this.stompClient.unsubscribe(`/topic/${this.roomId}`);
         this.stompClient.disconnect();
       }
@@ -110,20 +111,22 @@ export default{
 }
 </script>
 <style>
-.chat-box{
+.chat-box {
   height: 300px;
   overflow-y: auto;
   border: 1px solid #ddd;
   margin-bottom: 10px;
 }
 
-.chat-message{
-  margin-bottom:10px;
+.chat-message {
+  margin-bottom: 10px;
 }
-.sent{
-  text-align:right;
+
+.sent {
+  text-align: right;
 }
-.received{
-  text-align:left;
+
+.received {
+  text-align: left;
 }
 </style>
